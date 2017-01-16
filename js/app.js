@@ -1,6 +1,8 @@
 "use strict";
 var map;
 var markers = [];
+var marker;
+var largeInfoWindow;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -10,6 +12,11 @@ function initMap() {
         },
         zoom: 15
     });
+
+    var largeInfoWindow = new google.maps.InfoWindow();
+    placeMarkers();
+
+}
 
 
     var currentPlaces = [{
@@ -63,6 +70,59 @@ function initMap() {
     }];
 
 
+    var placeMarkers = function(){
+
+        var bounds = new google.maps.LatLngBounds();
+
+        for (var i = 0; i < currentPlaces.length; i++) {
+
+            var position = currentPlaces[i].geometry;
+            var title = currentPlaces[i].properties;
+
+            var marker = new google.maps.Marker({
+                map: map,
+                position: position,
+                title: title,
+                animation: google.maps.Animation.BOUNCE,
+                id: i
+            });
+
+            markers.push(marker);
+            
+            marker.addListener('click', function() {
+                populateInfoWindow(this, largeInfoWindow);
+                toggleBounce();
+
+            });
+
+            bounds.extend(markers[i].position);
+            // currentPlaces[i].marker = marker;
+            // marker.addListener('click', toggleBounce);
+        }
+
+        map.fitBounds(bounds);
+    
+
+        function toggleBounce() {
+            for (var i = 0; i < markers.length; i ++)
+
+                var currentMarker = null;
+
+                if (currentMarker) {
+                    currentMarker.setAnimation(null);
+                } else {
+
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                }
+        }
+
+
+        function populateInfoWindow (marker, infowindow) {
+
+        };
+    }
+
+
     var Places = function(data) {
         this.place = ko.observable(data.geometry);
         this.title = ko.observable(data.properties);
@@ -73,7 +133,7 @@ function initMap() {
         var self = this;
 
         this.placesList = ko.observableArray([]);
-        self.markers = ko.observableArray([]);
+        // self.markers = ko.observableArray([]);
 
         currentPlaces.forEach(function(item) {
             self.placesList.push(new Places(item));
@@ -89,46 +149,10 @@ function initMap() {
             populateInfoWindow(this, infowindow);
         };
 
-        var largeInfoWindow = new google.maps.InfoWindow();
-        var bounds = new google.maps.LatLngBounds();
-
-        for (var i = 0; i < currentPlaces.length; i++) {
-
-            var place = currentPlaces[i].geometry;
-            var title = currentPlaces[i].properties;
-
-            var marker = new google.maps.Marker({
-                map: map,
-                place: place,
-                title: title,
-                draggable: true,
-                animation: google.maps.Animation.DROP,
-                id: i
-            });
-
-            self.markers.push(marker);
-            marker.addListener('click', function() {
-                populateInfoWindow(this, largeInfoWindow);
-
-            });
-
-
-            marker.addListener('click', toggleBounce);
-        }
-
-        function toggleBounce() {
-            if (marker.getAnimation() !== null) {
-                marker.setAnimation(null);
-            } else {
-                marker.setAnimation(google.maps.Animation.BOUNCE);
-            }
-        }
-
         this.setMarker = function(clickedPlaces) {
             sel.currentPlace(clickedPlaces);
         };
 
-    };
 
-    ko.applyBindings(new ViewModel());
-}
+        ko.applyBindings(new ViewModel());
+    }
