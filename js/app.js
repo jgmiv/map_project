@@ -15,6 +15,7 @@ function initMap() {
 
     var largeInfoWindow = new google.maps.InfoWindow();
     placeMarkers();
+    ko.applyBindings(new ViewModel());
 
 }
 
@@ -120,6 +121,8 @@ function initMap() {
         function populateInfoWindow (marker, infowindow) {
 
         };
+
+
     }
 
 
@@ -154,5 +157,5 @@ function initMap() {
         };
 
 
-        ko.applyBindings(new ViewModel());
+        
     }
