@@ -38,6 +38,11 @@ hr {
   right: 0px;
 }
 
+#pano {
+        width: 200px;
+        height: 200px;
+      }
+
 .options-box {
   background: #fff;
   border: 1px solid #999;

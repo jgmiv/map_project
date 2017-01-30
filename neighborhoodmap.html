@@ -9,18 +9,20 @@
   </head>
   <body>
 	<div class="container">
-	  <div class="options-box" data-bind="with: currentPlaces">
+	  <!-- <div class="options-box" data-bind="with: currentPlaces"> -->
+    <div class="options-box">
 	    <h1>Places of Interest</h1> 
-    </div>  
-    <hr>
-      <ul data-bind="foreach: placesList">
-        <li data-bind="text: title, click: $parent.setLocation"></li>
-      </ul>
-    </div> 
-    <div> 
+      <!-- </div> -->
+      <hr>
+      <div>
+        <ul data-bind="foreach: placesList">
+          <li data-bind="text: title, click: $parent.setPlace"></li>
+        </ul>
+      </div> 
+<!--     <div> 
   	    <h2 data-bind="geometry: point"></h2>
-    </div>
-  <!-- </div>  -->
+    </div> -->
+  </div> 
   <div id="map"></div>
   <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyDXe-5e7zMz8_lZKNqB9vlTi60BZM4WYzY&v=3&callback=initMap">
   </script> 
