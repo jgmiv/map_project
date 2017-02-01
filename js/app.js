@@ -13,7 +13,7 @@ function initMap() {
         zoom: 15
     });
 
-    var largeInfoWindow = new google.maps.InfoWindow();
+    largeInfoWindow = new google.maps.InfoWindow();
 
     placeMarkers();
 
@@ -38,31 +38,29 @@ geometry: {
     lat: 33.213905,
     lng: -87.530016
 },
-properties: 'Rhoads Stadium'
+properties: 'Rhoads Stadium',
+image: 'https://s-media-cache-ak0.pinimg.com/236x/72/c6/0a/72c60a830cdd8e8e60cb9a1e1e959793.jpg'
 }, {
 geometry: {
     lat: 33.210787,
     lng: -87.532373
 },
-properties: 'Soccer Stadium'
+properties: 'Soccer Stadium', 
+image: "https://www.interiordecorating.com/images/products/1732-3757_z.jpg",
 }, {
 geometry: {
     lat: 33.204686,
     lng: -87.538614
 },
-properties: 'Sewell-Thomas Stadium'
-}, {
-geometry: {
-    lat: 33.207634,
-    lng: -87.550510
-},
-properties: 'Kinshasa'
-}, {
-geometry: {
+properties: 'Sewell-Thomas Stadium',
+image: 'http://wbrc.images.worldnow.com/images/9925769_G.jpg'
+},{
+ geometry: {
     lat: 33.202945,
     lng: -87.539768
 },
-properties: 'Sydney'
+properties: 'Coleman Colliseum',
+image: 'http://s3.amazonaws.com/rolltide.com/images/2016/6/21/8626767.jpeg'
 }, {
 geometry: {
     lat: 33.206623,
@@ -80,11 +78,12 @@ for (var i = 0; i < currentPlaces.length; i++) {
 
     var position = currentPlaces[i].geometry;
     var title = currentPlaces[i].properties;
-
+    var image = currentPlaces[i].image
     var marker = new google.maps.Marker({
         map: map,
         position: position,
         title: title,
+        image: image,
         animation: google.maps.Animation.BOUNCE,
         id: i
     });
@@ -94,6 +93,9 @@ for (var i = 0; i < currentPlaces.length; i++) {
     marker.addListener('click', function() {
         populateInfoWindow(this, largeInfoWindow);
         toggleBounce();
+
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function(){ marker.setAnimation(null); }, 750);    
 
     });
 
@@ -106,10 +108,10 @@ for (var i = 0; i < currentPlaces.length; i++) {
         var currentMarker = null;
 
         if (currentMarker) {
-            currentMarker.setAnimation(null);
+            marker.setAnimation(null);
         } else {
-
             marker.setAnimation(google.maps.Animation.BOUNCE);
+            // setTimeout(function(){ currentMarker.setAnimation(null); }, 750);
         }
 }
 }
@@ -149,10 +151,12 @@ if (infowindow.marker != marker) {
       var panorama = new google.maps.StreetViewPanorama(
         document.getElementById('pano'), panoramaOptions);
     } else {
-      infowindow.setContent('<div>' + marker.title + '</div>' +
-        '<div>No Street View Found</div>');
+        var infowindowHTML =  '<div>' + marker.title + '</div>' + "<img width = '80' src =" + marker.image + ">";
+        infowindow.setContent(infowindowHTML);
+        console.log(marker.image);
     }
   }
+  // +'<div>No Street View Found</div>'
   // Use streetview service to get the closest streetview image within
   // 50 meters of the markers position
   streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
@@ -170,6 +174,7 @@ var Places = function(data) {
     var self = this;
     self.place = ko.observable(data.geometry);
     self.title = ko.observable(data.properties);
+    self.image = ko.observable(data.image);
 };
 
 var ViewModel = function() {
