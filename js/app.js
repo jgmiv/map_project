@@ -78,7 +78,7 @@ for (var i = 0; i < currentPlaces.length; i++) {
 
     var position = currentPlaces[i].geometry;
     var title = currentPlaces[i].properties;
-    var image = currentPlaces[i].image
+    var image = currentPlaces[i].image;
     var marker = new google.maps.Marker({
         map: map,
         position: position,
@@ -91,27 +91,28 @@ for (var i = 0; i < currentPlaces.length; i++) {
     markers.push(marker);
     
     marker.addListener('click', function() {
+        var self = this;
         populateInfoWindow(this, largeInfoWindow);
-        toggleBounce();
+        toggleBounce(this);
 
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function(){ marker.setAnimation(null); }, 750);    
+    // marker.setAnimation(google.maps.Animation.BOUNCE);
+    // setTimeout(function(){self.setAnimation(null); }, 750);    
 
     });
 
     bounds.extend(markers[i].position);
     // currentPlaces[i].marker = marker;
     // marker.addListener('click', toggleBounce);
-    function toggleBounce() {
+    function toggleBounce(currentMarker) {
     for (var i = 0; i < markers.length; i ++)
 
-        var currentMarker = null;
+        currentMarker.setAnimation(null);
 
         if (currentMarker) {
             marker.setAnimation(null);
         } else {
             marker.setAnimation(google.maps.Animation.BOUNCE);
-            // setTimeout(function(){ currentMarker.setAnimation(null); }, 750);
+            setTimeout(function(){ currentMarker.setAnimation(null); }, 750);
         }
 }
 }
@@ -153,7 +154,7 @@ if (infowindow.marker != marker) {
     } else {
         var infowindowHTML =  '<div>' + marker.title + '</div>' + "<img width = '80' src =" + marker.image + ">";
         infowindow.setContent(infowindowHTML);
-        console.log(marker.image);
+
     }
   }
   // +'<div>No Street View Found</div>'
