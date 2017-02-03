@@ -112,7 +112,7 @@ for (var i = 0; i < currentPlaces.length; i++) {
             marker.setAnimation(null);
         } else {
             marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function(){ currentMarker.setAnimation(null); }, 750);
+            setTimeout(function(currentMarker){ currentMarker.setAnimation(null); }, 750,(marker));
         }
 }
 }
