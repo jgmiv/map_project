@@ -1,9 +1,10 @@
 "use strict";
+//Global variables
 var map;
 var markers = [];
 var marker;
 var largeInfoWindow;
-
+// Initilizes the map
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
@@ -20,7 +21,7 @@ function initMap() {
     ko.applyBindings(new ViewModel());
 
 }
-
+//Model
 var currentPlaces = [{
 geometry: {
     lat: 33.207634,
@@ -84,37 +85,25 @@ for (var i = 0; i < currentPlaces.length; i++) {
         position: position,
         title: title,
         image: image,
-        animation: google.maps.Animation.BOUNCE,
+        animation: google.maps.Animation.DROP,
         id: i
     });
 
     markers.push(marker);
+    currentPlaces[i].marker = marker
     
     marker.addListener('click', function() {
         var self = this;
         populateInfoWindow(this, largeInfoWindow);
         toggleBounce(this);
-
-    // marker.setAnimation(google.maps.Animation.BOUNCE);
-    // setTimeout(function(){self.setAnimation(null); }, 750);    
-
     });
 
     bounds.extend(markers[i].position);
-    // currentPlaces[i].marker = marker;
-    // marker.addListener('click', toggleBounce);
+
     function toggleBounce(currentMarker) {
-    for (var i = 0; i < markers.length; i ++)
-
-        currentMarker.setAnimation(null);
-
-        if (currentMarker) {
-            marker.setAnimation(null);
-        } else {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function(currentMarker){ currentMarker.setAnimation(null); }, 750,(marker));
-        }
-}
+        currentMarker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function(){currentMarker.setAnimation(null) }, 1400);
+    }
 }
 
 map.fitBounds(bounds);
@@ -122,7 +111,7 @@ map.fitBounds(bounds);
 
 function populateInfoWindow (marker, infowindow) {
 
-            // Check to make sure the infowindow is not already opened on this marker.
+// Check to make sure the infowindow is not already opened on this marker.
 if (infowindow.marker != marker) {
   // Clear the infowindow content to give the streetview time to load.
   infowindow.setContent('');
@@ -149,8 +138,10 @@ if (infowindow.marker != marker) {
             pitch: 30
           }
         };
+        //Provides panorama view if available.
       var panorama = new google.maps.StreetViewPanorama(
         document.getElementById('pano'), panoramaOptions);
+      //Provides an image if no street view is available.
     } else {
         var infowindowHTML =  '<div>' + marker.title + '</div>' + "<img width = '80' src =" + marker.image + ">";
         infowindow.setContent(infowindowHTML);
@@ -177,30 +168,29 @@ var Places = function(data) {
     self.title = ko.observable(data.properties);
     self.image = ko.observable(data.image);
 };
-
+//ViewModel 
 var ViewModel = function() {
 
     var self = this;
-
+    
     this.placesList = ko.observableArray([]);
     self.markers = ko.observableArray([]);
+    this.currentPlace = ko.observable(this.placesList()[0]);
 
     currentPlaces.forEach(function(item) {
         self.placesList.push(new Places(item));
     });
 
-    this.currentPlace = ko.observable(this.placesList()[0]);
-
-    this.setPlace = function(clickedPlaces){
-        self.currentPlace(clickedPlaces);
+    this.changePlace = function(clickedPlace){
+        self.currentPlace(clickedPlace);
     };
 
-    self.currentPlace = function() {
-        populateInfoWindow(this, infowindow);
+    this.setcurrentPlace = function(clickedPlace) {
+        self.currentPlace(clickedPlace);
     };
 
-    this.setMarker = function(clickedPlaces) {
-        self.currentPlace(clickedPlaces);
+    self.currentPlace = function(clickedPlace) {
+        self.populateInfoWindow(this, largeInfoWindow);
     };
 
 
