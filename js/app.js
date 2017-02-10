@@ -90,7 +90,7 @@ for (var i = 0; i < currentPlaces.length; i++) {
     });
 
     markers.push(marker);
-    currentPlaces[i].marker = marker
+    currentPlaces[i].marker = marker;
     
     marker.addListener('click', function() {
         var self = this;
@@ -148,7 +148,6 @@ if (infowindow.marker != marker) {
 
     }
   }
-  // +'<div>No Street View Found</div>'
   // Use streetview service to get the closest streetview image within
   // 50 meters of the markers position
   streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
@@ -163,10 +162,9 @@ if (infowindow.marker != marker) {
 
 
 var Places = function(data) {
-    var self = this;
-    self.place = ko.observable(data.geometry);
-    self.title = ko.observable(data.properties);
-    self.image = ko.observable(data.image);
+    this.place = ko.observable(data.geometry);
+    this.title = ko.observable(data.properties);
+    this.image = ko.observable(data.image);
 };
 //ViewModel 
 var ViewModel = function() {
@@ -174,25 +172,30 @@ var ViewModel = function() {
     var self = this;
     
     this.placesList = ko.observableArray([]);
-    self.markers = ko.observableArray([]);
-    this.currentPlace = ko.observable(this.placesList()[0]);
+    this.markers = ko.observableArray([]);
 
-    currentPlaces.forEach(function(item) {
-        self.placesList.push(new Places(item));
+
+    currentPlaces.forEach(function(placeItem) {
+        self.placesList.push( new Places(placeItem));
     });
+
+    this.currentPlace = ko.observable(this.placesList()[0]);
+    // console.log(this.currentPlace);
 
     this.changePlace = function(clickedPlace){
         self.currentPlace(clickedPlace);
     };
 
-    this.setcurrentPlace = function(clickedPlace) {
-        self.currentPlace(clickedPlace);
+    this.showPlace = function(populateInfoWindow) {
+        self.currentPlace(this, largeInfoWindow);
     };
 
-    self.currentPlace = function(clickedPlace) {
-        self.populateInfoWindow(this, largeInfoWindow);
+    var setPlace = function (clickedPlace){
+        self.currentPlace.showPlace(place);
     };
+    console.log(setPlace);
 
+    
 
     
 }
