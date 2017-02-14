@@ -165,6 +165,7 @@ var Places = function(data) {
     this.place = ko.observable(data.geometry);
     this.title = ko.observable(data.properties);
     this.image = ko.observable(data.image);
+    this.marker = ko.observable();
 };
 //ViewModel 
 var ViewModel = function() {
@@ -179,8 +180,14 @@ var ViewModel = function() {
         self.placesList.push( new Places(placeItem));
     });
 
+    markers.forEach(function(marker, i) {
+        self.Places.markers = marker[i];
+    });
+
     this.currentPlace = ko.observable(this.placesList()[0]);
     // console.log(this.currentPlace);
+
+    this.Places.markers = ko.observable(this.placesList()[0]);
 
     this.changePlace = function(clickedPlace){
         self.currentPlace(clickedPlace);
@@ -190,10 +197,11 @@ var ViewModel = function() {
         self.currentPlace(this, largeInfoWindow);
     };
 
-    var setPlace = function (clickedPlace){
-        self.currentPlace.showPlace(place);
+    this.setPlace = function (clickedPlace){
+        self.showPlace(Places.markers);
+        console.log(Places.markers);
     };
-    console.log(setPlace);
+    // console.log(setPlace);
 
     
 
