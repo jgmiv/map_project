@@ -14,8 +14,9 @@
 	    <h1>Crimson Places</h1> 
       <!-- </div> -->
       <hr>
+      <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for places..">
       <div>
-        <ul data-bind="foreach: placesList">
+        <ul id = "myUL" data-bind="foreach: placesList">
           <li id='placesList', data-bind="text: title, click: $parent.setPlace"></li>
         </ul>
       </div> 

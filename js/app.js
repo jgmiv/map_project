@@ -151,6 +151,7 @@ if (infowindow.marker != marker) {
   // Use streetview service to get the closest streetview image within
   // 50 meters of the markers position
   streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+  placesList()[i].markers = marker
   // Open the infowindow on the correct marker.
   infowindow.open(map, marker);
 }
@@ -160,6 +161,24 @@ if (infowindow.marker != marker) {
 
 }
 
+function myFunction() {
+    // Declare variables
+    var input, filter, ul, li, i;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName('li');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementById("placesList")[0];
+        if (toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    } 
+}
 
 var Places = function(data) {
     this.place = ko.observable(data.geometry);
@@ -181,25 +200,25 @@ var ViewModel = function() {
     });
 
     markers.forEach(function(marker, i) {
-        self.Places.markers = marker[i];
+        self.placesList()[i].markers = marker;
     });
 
     this.currentPlace = ko.observable(this.placesList()[0]);
     // console.log(this.currentPlace);
 
-    this.Places.markers = ko.observable(this.placesList()[0]);
+    this.placesList.markers = ko.observable(this.placesList()[0]);
 
     this.changePlace = function(clickedPlace){
         self.currentPlace(clickedPlace);
     };
 
-    this.showPlace = function(populateInfoWindow) {
-        self.currentPlace(this, largeInfoWindow);
+    this.setPlace = function (clickedPlace){
+        self.showPlace(placesList.marker);
+        console.log(currentPlaces);
     };
 
-    this.setPlace = function (clickedPlace){
-        self.showPlace(Places.markers);
-        console.log(Places.markers);
+    this.showPlace = function(populateInfoWindow) {
+        self.currentPlace(this, largeInfoWindow);
     };
     // console.log(setPlace);
 
