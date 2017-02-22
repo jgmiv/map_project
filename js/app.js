@@ -151,7 +151,7 @@ if (infowindow.marker != marker) {
   // Use streetview service to get the closest streetview image within
   // 50 meters of the markers position
   streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
-  placesList()[i].markers = marker
+  // placesList()[i].markers = marker
   // Open the infowindow on the correct marker.
   infowindow.open(map, marker);
 }
@@ -161,24 +161,7 @@ if (infowindow.marker != marker) {
 
 }
 
-function myFunction() {
-    // Declare variables
-    var input, filter, ul, li, i;
-    input = document.getElementById('myInput');
-    filter = input.value.toUpperCase();
-    ul = document.getElementById("myUL");
-    li = ul.getElementsByTagName('li');
 
-    // Loop through all list items, and hide those who don't match the search query
-    for (i = 0; i < li.length; i++) {
-        a = li[i].getElementById("placesList")[0];
-        if (toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    } 
-}
 
 var Places = function(data) {
     this.place = ko.observable(data.geometry);
@@ -193,6 +176,7 @@ var ViewModel = function() {
     
     this.placesList = ko.observableArray([]);
     this.markers = ko.observableArray([]);
+    // this.queryList = ko.observableArray([]);
 
 
     currentPlaces.forEach(function(placeItem) {
@@ -214,15 +198,14 @@ var ViewModel = function() {
 
     this.setPlace = function (clickedPlace){
         self.showPlace(placesList.marker);
-        console.log(currentPlaces);
+        google.maps.event.trigger(clickedPlace.markers, 'click');
+        // console.log(clickedPlace.markers);
     };
 
     this.showPlace = function(populateInfoWindow) {
         self.currentPlace(this, largeInfoWindow);
     };
-    // console.log(setPlace);
-
     
-
+   
     
 }
