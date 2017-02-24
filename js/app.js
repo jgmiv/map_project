@@ -176,7 +176,7 @@ var ViewModel = function() {
     
     this.placesList = ko.observableArray([]);
     this.markers = ko.observableArray([]);
-    // this.queryList = ko.observableArray([]);
+    this.query = ko.observableArray(['']);
 
 
     currentPlaces.forEach(function(placeItem) {
@@ -205,7 +205,5 @@ var ViewModel = function() {
     this.showPlace = function(populateInfoWindow) {
         self.currentPlace(this, largeInfoWindow);
     };
-    
-   
-    
+
 }

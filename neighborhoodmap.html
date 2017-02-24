@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width = device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="css/map.css">
     <title>"In Our Neighborhood..."</title>
@@ -14,9 +14,10 @@
 	    <h1>Crimson Places</h1> 
       <!-- </div> -->
       <hr>
-      <!-- placeholder = "Search for places.." -->
-      <input data-bind = "value: currentPlaces.properties" >
-      <button data-bind = "click: ViewModel.showPlace">Go</button>
+      <form data-bind = "submit: showPlace">
+      <input data-bind = "value: currentPlaces.properties" placeholder = "Search for places..">
+      <button>Go</button>
+      </form>
       <div>
         <ul data-bind="foreach: placesList">
           <li id='placesList', data-bind="text: title, click: $parent.setPlace"></li>
