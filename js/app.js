@@ -176,7 +176,7 @@ var ViewModel = function() {
     
     this.placesList = ko.observableArray([]);
     this.markers = ko.observableArray([]);
-    this.query = ko.observableArray(['']);
+    // this.query = ko.observableArray(['']);
 
 
     currentPlaces.forEach(function(placeItem) {
@@ -206,4 +206,16 @@ var ViewModel = function() {
         self.currentPlace(this, largeInfoWindow);
     };
 
+    //filter the items using the filter text
+    this.filteredItems = ko.computed(function() {
+      var filter = self.filter().toLowerCase();
+      if (!filter) {
+          return self.placesList;
+      } else {
+          return ko.utils.arrayFilter(self.placesList, function(item) {
+              var visible = item.name().toLowerCase().indexOf(filter) != -1;
+              item.marker.setVisible(visible);
+          });
+      }
+    });
 }
