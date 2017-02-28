@@ -15,11 +15,11 @@
       <!-- </div> -->
       <hr>
       <form data-bind = "submit: showPlace">
-      <input data-bind = "textInput: filter" placeholder = "Search for places..">
+      <input data-bind = "textInput: query" placeholder = "Search for places..">
       <button>Go</button>
       </form>
       <div>
-        <ul data-bind="foreach: filteredItems">
+        <ul data-bind="foreach: placesList">
           <li id='placesList', data-bind="text: title, click: $parent.setPlace"></li>
         </ul>
       </div> 

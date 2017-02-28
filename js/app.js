@@ -219,9 +219,9 @@ var ViewModel = function() {
 
     //filter the items using the filter text
     this.filterPlaces = ko.computed(function() {
-      var search = this.query().toLowerCase();
+      var search = self.query().toLowerCase();
         return ko.utils.arrayFilter(self.markers(), function(item) {
-          markers.name().toLowerCase().indexOf(search) >= 0;
+          placesList.markers().toLowerCase().indexOf(search) >= 0;
         });
       });
 }
