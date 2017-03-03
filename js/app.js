@@ -176,7 +176,7 @@ var ViewModel = function() {
     
     this.placesList = ko.observableArray([]);
     this.markers = ko.observableArray([]);
-    this.query = ko.observable('');
+    self.filter = ko.observable("");
     
 
 
@@ -217,11 +217,23 @@ var ViewModel = function() {
       }
     });
 
+    
+
     //filter the items using the filter text
     this.filterPlaces = ko.computed(function() {
-      var search = self.query().toLowerCase();
-        return ko.utils.arrayFilter(self.markers(), function(item) {
-          placesList.markers().toLowerCase().indexOf(search) >= 0;
-        });
+      console.log(self.filterPlaces);
+      var filter = self.filter().toLowerCase();
+      if (!filter){
+
+        return self.currentPlace(marker);
+
+      } else {
+        
+          return ko.utils.arrayFilter(self.currentPlace(), function(item) {
+            return placesList.markers().toLowerCase().indexOf() >= -1;
+          });
+        }
+
       });
+
 }
