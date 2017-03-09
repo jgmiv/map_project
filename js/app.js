@@ -186,6 +186,7 @@ var ViewModel = function() {
 
     markers.forEach(function(marker, i) {
         self.placesList()[i].markers = marker;
+        // console.log(marker);
     });
 
     this.currentPlace = ko.observable(this.placesList()[0]);
@@ -214,18 +215,12 @@ var ViewModel = function() {
       var filter = self.filterTxt().toLowerCase();
       if (!filter){
         return self.placesList();
-        // return ko.utils.arrayFilter(self.placesList(), function(item){
-        //   item.visible(true);
-        //   item.marker && item.marker.setVisible(true);
-        //   return true;
       } else {
-
-         return ko.utils.arrayFilter(self.filterTxt(), function(item) {
-            return self.showPlace(placesList.marker).toLowerCase().indexOf() >= -1;
-            console.log(setPlace());
+         return ko.utils.arrayFilter(self.placesList(), function(title) {
+            return ko.utils.stringStartsWith(title.name().toLowerCase(), filter); 
+            console.log(title);
           });
         }
-
-      });
+      }, ViewModel);
 
 }
