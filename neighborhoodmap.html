@@ -14,7 +14,8 @@
 	    <h1>Crimson Places</h1> 
       <!-- </div> -->
       <hr>
-      <input data-bind = "textInput: filterTxt" placeholder = "Search for places..">
+      <!-- <input data-bind = "textInput: filterTxt" placeholder = "Search for places.."> -->
+      <input data-bind = "value: filterTxt" placeholder = "Search for places..">
       <button data-bind = "click: setPlace">Go</button>
       <div>
         <ul data-bind="foreach: filterPlaces">
