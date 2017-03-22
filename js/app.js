@@ -166,7 +166,6 @@ if (infowindow.marker != marker) {
 var Places = function(data) {
     this.place = ko.observable(data.geometry);
     this.title = ko.observable(data.properties);
-    console.log(this.title);
     this.image = ko.observable(data.image);
     this.marker = ko.observable();
 };
@@ -178,6 +177,7 @@ var ViewModel = function() {
     this.placesList = ko.observableArray([]);
     this.markers = ko.observableArray([]);
     this.filterTxt = ko.observable("");
+    // console.log(this.filterTxt);
     
 
 
@@ -197,7 +197,7 @@ var ViewModel = function() {
 
     this.changePlace = function(clickedPlace){
         self.currentPlace(clickedPlace);
-        console.log(clickedPlace)
+        // console.log(clickedPlace)
     };
 
     this.setPlace = function (clickedPlace){
@@ -219,11 +219,12 @@ var ViewModel = function() {
         return self.placesList();
       } else {
          return ko.utils.arrayFilter(self.placesList(), function(place) {
-          
-            return ko.utils.title.indexOf(place.name(title),toLowerCase(), filter); 
-                console.log(place.name(title));
+              console.log(place);
+            // var index = placeTitle.indexOf(place.title()); 
+            return place.title().toLowerCase().indexOf(filter) != -1; 
+                console.log(place.title());
           });
         }
-      }, ViewModel);
+      });
 
 }
