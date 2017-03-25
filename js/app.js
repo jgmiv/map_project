@@ -206,10 +206,19 @@ var ViewModel = function() {
         // console.log(clickedPlace.markers);
     };
 
-    this.showPlace = function(populateInfoWindow) {
-        self.currentPlace(this, largeInfoWindow);
-    };
-    
+    // this.showPlace = function(populateInfoWindow) {
+    //     self.currentPlace(marker, largeInfoWindow);
+    // };
+    this.showPlace = function() {
+      if(self.title == "") {
+        window.alert("Enter a valid place.");
+      } else {
+         self.placesList().forEach (function(p) {
+          self.setPlace(p);
+          });
+        }
+      
+    }
 
     //filter the items using the filter text
     self.filterPlaces = ko.computed(function() {
@@ -219,12 +228,13 @@ var ViewModel = function() {
         return self.placesList();
       } else {
          return ko.utils.arrayFilter(self.placesList(), function(place) {
-              console.log(place);
+              // console.log(place);
             // var index = placeTitle.indexOf(place.title()); 
             return place.title().toLowerCase().indexOf(filter) != -1; 
-                console.log(place.title());
+                
           });
         }
       });
 
 }
+
