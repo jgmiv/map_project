@@ -163,7 +163,7 @@ if (infowindow.marker != marker) {
 
 
 
-var Places = function(data) {
+var Place = function(data) {
     this.place = ko.observable(data.geometry);
     this.title = ko.observable(data.properties);
     this.image = ko.observable(data.image);
@@ -182,7 +182,8 @@ var ViewModel = function() {
 
 
     currentPlaces.forEach(function(placeItem) {
-        self.placesList.push( new Places(placeItem));
+        self.placesList.push( new Place
+          (placeItem));
     });
 
     markers.forEach(function(marker, i) {
@@ -193,7 +194,7 @@ var ViewModel = function() {
     this.currentPlace = ko.observable(this.placesList()[0]);
     // console.log(this.currentPlace);
 
-    this.placesList.markers = ko.observable(this.placesList()[0]);
+    this.placesList.marker = ko.observable(this.placesList()[0]);
 
     this.changePlace = function(clickedPlace){
         self.currentPlace(clickedPlace);
@@ -206,35 +207,42 @@ var ViewModel = function() {
         // console.log(clickedPlace.markers);
     };
 
-    // this.showPlace = function(populateInfoWindow) {
-    //     self.currentPlace(marker, largeInfoWindow);
-    // };
-    this.showPlace = function() {
-      if(self.title == "") {
-        window.alert("Enter a valid place.");
-      } else {
-         self.placesList().forEach (function(p) {
-          self.setPlace(p);
-          });
-        }
-      
-    }
-
+    this.showPlace = function(populateInfoWindow) {
+        self.currentPlace(marker, largeInfoWindow);
+    };
+    
+   
     //filter the items using the filter text
     self.filterPlaces = ko.computed(function() {
       // console.log(self.filterPlaces);
       var filter = self.filterTxt().toLowerCase();
       if (!filter){
+        for (var i = markers.length - 1; i >= 0; i--) {
+                markers[i].setVisible(true); //get all the markers back
+            };
         return self.placesList();
       } else {
-         return ko.utils.arrayFilter(self.placesList(), function(place) {
-              // console.log(place);
-            // var index = placeTitle.indexOf(place.title()); 
-            return place.title().toLowerCase().indexOf(filter) != -1; 
+         return ko.utils.arrayFilter(self.placesList(), function(placeItem) {
+
+            var i = currentPlaces.indexOf(placeItem.title());
+            console.log(i);
+            console.log(placeItem.title());
+
+              if (placeItem.title().toLowerCase().indexOf(filter) === -1) {
+
+                    placesList.markers[i].setVisible(true);
+                    console.log(markers[i]);
+
+                } else {
+
+                    marker.setVisible(false);
+                }; 
                 
+            return placeItem.title().toLowerCase().indexOf(filter) != -1; 
+
+             
           });
         }
       });
 
 }
-
