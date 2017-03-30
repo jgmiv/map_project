@@ -225,22 +225,24 @@ var ViewModel = function() {
          return ko.utils.arrayFilter(self.placesList(), function(placeItem) {
 
             var i = currentPlaces.indexOf(placeItem.title());
-            console.log(i);
-            console.log(placeItem.title());
 
               if (placeItem.title().toLowerCase().indexOf(filter) === -1) {
 
-                    placesList.markers[i].setVisible(true);
-                    console.log(markers[i]);
+                    placeItem.markers.setVisible(false);
 
-                } else {
+                    map.setZoom(17);
+                    map.panTo(placeItem.markers.position);
 
-                    marker.setVisible(false);
+
+
+                } else { 
+
+                    placeItem.markers.setVisible(true);
+                    
                 }; 
                 
             return placeItem.title().toLowerCase().indexOf(filter) != -1; 
-
-             
+   
           });
         }
       });
