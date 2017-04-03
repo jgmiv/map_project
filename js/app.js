@@ -222,7 +222,7 @@ var ViewModel = function() {
             };
         return self.placesList();
       } else {
-         return ko.utils.arrayFilter(self.placesList(), function(placeItem) {
+          return ko.utils.arrayFilter(self.placesList(), function(placeItem) {
 
             var i = currentPlaces.indexOf(placeItem.title());
 
@@ -231,9 +231,9 @@ var ViewModel = function() {
                     placeItem.markers.setVisible(false);
 
                     map.setZoom(17);
+                    map.setTimeout('map.setZoom(17)', marker);
                     map.panTo(placeItem.markers.position);
-
-
+                    
 
                 } else { 
 
@@ -242,9 +242,74 @@ var ViewModel = function() {
                 }; 
                 
             return placeItem.title().toLowerCase().indexOf(filter) != -1; 
-   
           });
         }
+    
+    function loadData() {
+
+          var $body = $('body');
+          var $wikiHeaderElem = $('#wikipedia-header')
+          var $wikiElem = $('#wikipedia-links');
+
+          // clear out old data before new request
+          $wikiElem.text("");
+
+          // AJAX request to NYTimes.
+          var nytimesUrl = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=news_desk:("Sports")' + filterTxt + '&sort=newest&api-key=8c17a413d53040e4bab4cab149b90cb2'
+
+          $.getJSON(nytimesUrl, function (data){
+
+              $nytHeaderElem.text('New York Times Articles About ' + filterTxt);
+
+              articles = data.response.docs;
+              for (var i = 0; i < articles.length; i++) {
+                  var article = articles[i];
+                  $nytElem.append('<li class="article">'+ '<a href="'+article.web_url+'">'+article.headline.main+'</a>'+ '<p>' + article.snippet + '</p>'+'</li>');  
+                           
+              };
+              //AJAX request error.
+          }).error(function(e){
+              $nytHeaderElem.text('New York Times Articles Could Not Be Loaded ');
+          });
+
+          var wikiRequestTimeout = setTimeout(function(){
+            $wikiHeaderElem.text("failed to load wikipedia resources");
+          }, 8000);
+
+          var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+ filterTxt +'&format=json'
+
+          $.ajax({
+            url: wikipediaEndPointUrl,
+            data: {
+                "action": "opensearch",
+                "search": filterTxt,
+                "format": "json",
+          },
+          dataType: "jsonp",
+          success: function (response) {
+              console.log(response);
+              linkDisplays = response[1];
+              links = response[3];
+              var articles = [];
+              for (var index = 0; index < response[1].length; index++) {
+                  articles.push(
+                      "<li><a href=" + '"' + links[index] + '"' + ">" + linkDisplays[index] + "</a></li>");
+              };
+              $wikiElem.append(articles);
+              clearTimeout(wikiRequestTimeout);
+          }
       });
 
-}
+
+          return false;
+      };
+
+      $('#container').submit(loadData);
+
+
+      });
+
+
+
+
+    }

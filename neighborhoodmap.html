@@ -16,6 +16,10 @@
       <hr>
       <input data-bind = "textInput: filterTxt" placeholder = "Search for places..">
       <!-- <button data-bind = "click: showPlace">Go</button> -->
+      <div class="wikipedia-container">
+        <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
+        <ul id="wikipedia-header" data-bind = "textInput: filterTxt"></ul>
+      </div>
       <div>
         <ul data-bind="foreach: filterPlaces">
           <li id='placesList', data-bind="text: title, click: $parent.setPlace"></li>
