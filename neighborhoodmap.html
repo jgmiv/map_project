@@ -17,8 +17,8 @@
       <input data-bind = "textInput: filterTxt" placeholder = "Search for places..">
       <!-- <button data-bind = "click: showPlace">Go</button> -->
       <div class="wikipedia-container">
-        <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
-        <ul id="wikipedia-header" data-bind = "textInput: filterTxt"></ul>
+<!--         <h3 id="wikipedia-header">Relevant Wikipedia Links</h3> -->
+        <ul id="wikipedia-links" data-bind = "foreach: wikiLinks"></ul>
       </div>
       <div>
         <ul data-bind="foreach: filterPlaces">
@@ -29,6 +29,7 @@
   <div id="map"></div>
   <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyDXe-5e7zMz8_lZKNqB9vlTi60BZM4WYzY&v=3&callback=initMap">
   </script> 
+  <script src="js/lib/jquery.min.js"></script>
   <script async src="js/lib/knockout-3.4.1.js"></script>
   <script async src="js/app.js"></script>
  <!--  <script src="js/mapinit.js"></script>  -->
