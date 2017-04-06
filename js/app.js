@@ -86,7 +86,8 @@ var placeMarkers = function() {
             title: title,
             image: image,
             animation: google.maps.Animation.DROP,
-            id: i
+            id: i,
+            // article: article
         });
 
         markers.push(marker);
@@ -176,13 +177,13 @@ function loadData() {
     // clear out old data before new request
     $wikiElem.text("");
 
-    var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+clickedPlace+'&format=json'
+    var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+ marker.title+'&format=json'
 
     $.ajax({
       url: wikipediaEndPointUrl,
       data: {
           "action": "opensearch",
-          "search": clickedPlace,
+          "search": marker.title,
           "format": "json",
     },
     dataType: "jsonp",
@@ -225,7 +226,7 @@ var ViewModel = function() {
     this.markers = ko.observableArray([]);
     this.filterTxt = ko.observable("");
     this.wikiLinks = ko.observableArray()
-    // console.log(this.filterTxt);
+    console.log(this.wikiLinks);
 
 
 
@@ -235,6 +236,7 @@ var ViewModel = function() {
 
     currentPlaces.forEach(function(article){
         self.wikiLinks().push(new Place(article));
+        // console.log(wikiLinks);
     });
 
     markers.forEach(function(marker, i) {
@@ -242,8 +244,9 @@ var ViewModel = function() {
         // console.log(marker);
     });
 
-    wikiLinks.forEach(function(article, i){
+    self.wikiLinks().forEach(function(article, i){
         self.placesList()[i].wikiLinks = article;
+        console.log(article);
     });
 
     this.currentPlace = ko.observable(this.placesList()[0]);
@@ -281,7 +284,7 @@ var ViewModel = function() {
             return self.placesList();
         } else {
             return ko.utils.arrayFilter(self.placesList(), function(placeItem) {
-                concole.log(placeItem);
+    
                 var i = currentPlaces.indexOf(placeItem.title());
 
                 if (placeItem.title().toLowerCase().indexOf(filter) === -1) {
