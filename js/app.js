@@ -87,7 +87,7 @@ var placeMarkers = function() {
             image: image,
             animation: google.maps.Animation.DROP,
             id: i,
-            // article: article
+            // wiki: article
         });
 
         markers.push(marker);
@@ -161,53 +161,55 @@ var placeMarkers = function() {
             // placesList()[i].markers = marker
             // Open the infowindow on the correct marker.
             infowindow.open(map, marker);
+            console.log("test");
+            
+
+            function wikiLinks() {
+
+                var $body = $('body');
+                var $wikiHeaderElem = $('#wikipedia-header')
+                var $wikiElem = $('#wikipedia-links');
+
+                // clear out old data before new request
+                $wikiElem.text("");
+
+                var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+ marker.title +'&format=json'
+
+                $.ajax({
+                  url: wikipediaEndPointUrl,
+                  data: {
+                      "action": "opensearch",
+                      "search": marker.title,
+                      "format": "json",
+                },
+                dataType: "jsonp",
+                success: function (response) {
+                    console.log(response);
+                    linkDisplays = response[1];
+                    links = response[3];
+                    var articles = [];
+                    for (var index = 0; index < response[1].length; index++) {
+                        infowindow.setContent(
+                            "<li><a href=" + '"' + links[index] + '"' + ">" + linkDisplays[index] + "</a></li>");
+                    };
+                    $wikiElem.append(articles);
+                    clearTimeout(wikiRequestTimeout);
+                }
+            });
+
+                wikiLinks();
+
+                return false;
+            };
+
+            $('#wikipedia-container').submit(wikiLinks);
+
         }
 
     };
 
 
 }
-
-function loadData() {
-
-    var $body = $('body');
-    var $wikiHeaderElem = $('#wikipedia-header')
-    var $wikiElem = $('#wikipedia-links');
-
-    // clear out old data before new request
-    $wikiElem.text("");
-
-    var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+ marker.title+'&format=json'
-
-    $.ajax({
-      url: wikipediaEndPointUrl,
-      data: {
-          "action": "opensearch",
-          "search": marker.title,
-          "format": "json",
-    },
-    dataType: "jsonp",
-    success: function (response) {
-        console.log(response);
-        linkDisplays = response[1];
-        links = response[3];
-        var articles = [];
-        for (var index = 0; index < response[1].length; index++) {
-            articles.push(
-                "<li><a href=" + '"' + links[index] + '"' + ">" + linkDisplays[index] + "</a></li>");
-        };
-        $wikiElem.append(articles);
-        clearTimeout(wikiRequestTimeout);
-    }
-});
-
-
-    return false;
-};
-
-$('#container').submit(loadData);
-
-
 
 
 var Place = function(data) {
@@ -226,7 +228,7 @@ var ViewModel = function() {
     this.markers = ko.observableArray([]);
     this.filterTxt = ko.observable("");
     this.wikiLinks = ko.observableArray()
-    console.log(this.wikiLinks);
+    console.log(this.markers);
 
 
 
@@ -262,13 +264,13 @@ var ViewModel = function() {
     };
 
     this.setPlace = function(clickedPlace) {
-        self.showPlace(placesList.marker);
+        self.showPlace(clickedPlace);
         google.maps.event.trigger(clickedPlace.markers, 'click');
         // console.log(clickedPlace.markers);
     };
 
-    this.showPlace = function(populateInfoWindow) {
-        self.currentPlace(marker, article, largeInfoWindow);
+    this.showPlace = function(location) {
+        self.currentPlace(location);
     };
 
 
@@ -291,7 +293,7 @@ var ViewModel = function() {
 
                     placeItem.markers.setVisible(false);
 
-                    map.setZoom(17);
+                    map.setZoom(15);
                     // map.setTimeout('map.setZoom(17)', placeItem);
                     map.panTo(placeItem.markers.position);
 
