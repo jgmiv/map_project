@@ -189,7 +189,7 @@ var placeMarkers = function() {
                     links = response[3];
                     var articles = [];
                     for (var index = 0; index < response[1].length; index++) {
-                        infowindow.setContent(
+                        articles.push(
                             "<li><a href=" + '"' + links[index] + '"' + ">" + linkDisplays[index] + "</a></li>");
                     };
                     $wikiElem.append(articles);
