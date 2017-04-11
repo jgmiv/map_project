@@ -4,8 +4,10 @@ var map;
 var markers = [];
 var marker;
 var largeInfoWindow;
+var vm;
 // Initilizes the map
 function initMap() {
+    vm = new ViewModel();
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
             lat: 33.209979,
@@ -16,9 +18,11 @@ function initMap() {
 
     largeInfoWindow = new google.maps.InfoWindow();
 
+    ko.applyBindings(vm);
     placeMarkers();
 
-    ko.applyBindings(new ViewModel());
+
+
 
 }
 //Model
@@ -90,8 +94,10 @@ var placeMarkers = function() {
             // wiki: article
         });
 
+        vm.placesList()[i].marker = marker;
+
         markers.push(marker);
-        currentPlaces[i].marker = marker;
+        // currentPlaces[i].marker = marker;
 
         marker.addListener('click', function() {
             var self = this;
@@ -113,7 +119,7 @@ var placeMarkers = function() {
 
     //getting data from wikipedia..
     //concept from the class videos tutorial..
-    
+
 
 
     function populateInfoWindow(marker, infowindow) {
@@ -127,6 +133,7 @@ var placeMarkers = function() {
             infowindow.addListener('closeclick', function() {
                 infowindow.marker = null;
             });
+            wikiLinks();
             var streetViewService = new google.maps.StreetViewService();
             var radius = 50;
             // In case the status is OK, which means the pano was found, compute the
@@ -158,51 +165,44 @@ var placeMarkers = function() {
             // Use streetview service to get the closest streetview image within
             // 50 meters of the markers position
             streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
-            // placesList()[i].markers = marker
+
             // Open the infowindow on the correct marker.
             infowindow.open(map, marker);
-            console.log("test");
+            // console.log("test");
             
 
             function wikiLinks() {
 
-                var $body = $('body');
-                var $wikiHeaderElem = $('#wikipedia-header')
-                var $wikiElem = $('#wikipedia-links');
+                // var $body = $('body');
+                // var $wikiHeaderElem = $('#wikipedia-header')
+                // var $wikiElem = $('#wikipedia-links');
 
-                // clear out old data before new request
-                $wikiElem.text("");
+                // // clear out old data before new request
+                // $wikiElem.text("");
 
-                var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+ marker.title +'&format=json'
+                var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json'
 
                 $.ajax({
-                  url: wikipediaEndPointUrl,
-                  data: {
-                      "action": "opensearch",
-                      "search": marker.title,
-                      "format": "json",
-                },
-                dataType: "jsonp",
-                success: function (response) {
-                    console.log(response);
-                    linkDisplays = response[1];
-                    links = response[3];
-                    var articles = [];
-                    for (var index = 0; index < response[1].length; index++) {
-                        articles.push(
-                            "<li><a href=" + '"' + links[index] + '"' + ">" + linkDisplays[index] + "</a></li>");
-                    };
-                    $wikiElem.append(articles);
-                    clearTimeout(wikiRequestTimeout);
-                }
-            });
+                    url: wikipediaEndPointUrl,
+                    data: {
+                        "action": "opensearch",
+                        "search": marker.title,
+                        "format": "json",
+                    },
+                    dataType: "jsonp",
+                    vm.wikiInfo: {
 
-                wikiLinks();
+                        title: response[0],
+                        url: response[3][0]
+                    },
 
-                return false;
+                });
+
             };
 
-            $('#wikipedia-container').submit(wikiLinks);
+
+
+            $('#container').submit(wikiLinks);
 
         }
 
@@ -217,7 +217,7 @@ var Place = function(data) {
     this.title = ko.observable(data.properties);
     this.image = ko.observable(data.image);
     this.marker = ko.observable();
-    this.article = ko.observable();
+
 };
 //ViewModel 
 var ViewModel = function() {
@@ -227,8 +227,8 @@ var ViewModel = function() {
     this.placesList = ko.observableArray([]);
     this.markers = ko.observableArray([]);
     this.filterTxt = ko.observable("");
-    this.wikiLinks = ko.observableArray()
-    console.log(this.markers);
+    // this.wikiLinks = ko.observableArray([]);
+    this.wikiInfo = ko.observable();
 
 
 
@@ -236,27 +236,27 @@ var ViewModel = function() {
         self.placesList.push(new Place(placeItem));
     });
 
-    currentPlaces.forEach(function(article){
-        self.wikiLinks().push(new Place(article));
-        // console.log(wikiLinks);
-    });
+    // currentPlaces.forEach(function(article) {
+    //     self.wikiLinks().push(new Place(article));
+    //     // console.log(wikiLinks);
+    // });
 
     markers.forEach(function(marker, i) {
         self.placesList()[i].markers = marker;
         // console.log(marker);
     });
 
-    self.wikiLinks().forEach(function(article, i){
-        self.placesList()[i].wikiLinks = article;
-        console.log(article);
-    });
+    // self.wikiLinks().forEach(function(article, i) {
+    //     self.placesList()[i].wikiLinks = article;
+    //     // console.log(article);
+    // });
 
     this.currentPlace = ko.observable(this.placesList()[0]);
     // console.log(self.currentPlace);
 
     this.placesList.marker = ko.observable(this.placesList()[0]);
 
-    this.wikiLinks.marker = ko.observable(this.wikiLinks()[0]);
+    // this.wikiLinks.marker = ko.observable(this.wikiLinks()[0]);
 
     this.changePlace = function(clickedPlace) {
         self.currentPlace(clickedPlace);
@@ -265,7 +265,7 @@ var ViewModel = function() {
 
     this.setPlace = function(clickedPlace) {
         self.showPlace(clickedPlace);
-        google.maps.event.trigger(clickedPlace.markers, 'click');
+        google.maps.event.trigger(clickedPlace.marker, 'click');
         // console.log(clickedPlace.markers);
     };
 
@@ -286,7 +286,7 @@ var ViewModel = function() {
             return self.placesList();
         } else {
             return ko.utils.arrayFilter(self.placesList(), function(placeItem) {
-    
+
                 var i = currentPlaces.indexOf(placeItem.title());
 
                 if (placeItem.title().toLowerCase().indexOf(filter) === -1) {

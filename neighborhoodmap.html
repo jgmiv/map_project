@@ -16,16 +16,15 @@
       <hr>
       <input data-bind = "textInput: filterTxt" placeholder = "Search for places..">
       <!-- <button data-bind = "click: showPlace">Go</button> -->
-      <div class="wikipedia-container">
-<!--         <h3 id="wikipedia-header">Relevant Wikipedia Links</h3> -->
-        <ul id="wikipedia-links" data-bind = "foreach: filterTxt"></ul>
-      </div>
       <div>
         <ul data-bind="foreach: filterPlaces">
           <li id='placesList', data-bind="text: title, click: $parent.setPlace"></li>
         </ul>
       </div> 
-  </div> 
+      <div data-bind="with: wikiInfo">
+        <a data-bind="text: title, attr: { href: url }"></a>
+      </div>
+    </div> 
   <div id="map"></div>
   <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyDXe-5e7zMz8_lZKNqB9vlTi60BZM4WYzY&v=3&callback=initMap">
   </script> 
