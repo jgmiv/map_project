@@ -22,6 +22,7 @@ interesting.
 * [Google Maps API](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=google+api)
 * [Wikipedia API](https://en.wikipedia.org/wiki/List_of_news_media_APIs)
 * [Udacity Forums](https://discussions.udacity.com/c/nd001-front-end-broadcast)
+* [Knockout Js](http://knockoutjs.com/)
 
 # How to Run:
 
