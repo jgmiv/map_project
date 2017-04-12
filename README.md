@@ -11,9 +11,9 @@ interesting.
 
 # Files details:
 
-`neighborhood.html`- file contains the html code.
-`js/app.js`- file contains the well designed model veiw veiw model architecture with knockout bindings.
-`css/map.css` contains the header, color and font properties that are applied to the project.
+- `neighborhood.html`- file contains the html code.
+- `js/app.js`- file contains the well designed model veiw veiw model architecture with knockout bindings.
+- `css/map.css` contains the header, color and font properties that are applied to the project.
 
 # Sources:
 
