@@ -25,5 +25,6 @@ interesting.
 
 # How to Run:
 
-Open the file [neighborhoodmap.html](neighborhoodmap.html) in your web browser and it will be displayed.
-You can type different places in the search bar from within the list and see them filter along with the markers.  Click on the list item to see an infowindow appear along with a link, below the list, to Wikipedia. 
+Ocne project is cloned to your machine, open the file [neighborhoodmap.html](neighborhoodmap.html) in your web browser and it
+will be displayed.  You can type different places in the search bar from within the list and see them filter along with the   
+markers.  Click on the list item to see an infowindow appear along with a link, below the list, to Wikipedia. 
