@@ -50,7 +50,7 @@ var currentPlaces = [{
         lat: 33.210787,
         lng: -87.532373
     },
-    properties: 'Soccer Stadium',
+    properties: 'Alabama Soccer Stadium',
     image: "https://www.interiordecorating.com/images/products/1732-3757_z.jpg",
 }, {
     geometry: {
@@ -285,9 +285,9 @@ var ViewModel = function() {
 
                     placeItem.marker.setVisible(false);
 
-                    map.setZoom(15);
-                    // map.setTimeout('map.setZoom(15)', placeItem);
-                    map.panTo(placeItem.marker.position);
+                    // map.setZoom(15);
+                    // // map.setTimeout('map.setZoom(15)', placeItem);
+                    // map.panTo(placeItem.marker.position);
 
 
                 } else {
