@@ -17,11 +17,11 @@ interesting.
 
 # Sources:
 
-*[Stackoverflow](https://stackoverflow.com/)
-*[W3Schools](https://www.w3schools.com/)
-*[Google Maps API](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=google+api)
-*[Wikipedia API](https://en.wikipedia.org/wiki/List_of_news_media_APIs)
-*[Udacity Forums](https://discussions.udacity.com/c/nd001-front-end-broadcast)
+* [Stackoverflow](https://stackoverflow.com/)
+* [W3Schools](https://www.w3schools.com/)
+* [Google Maps API](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=google+api)
+* [Wikipedia API](https://en.wikipedia.org/wiki/List_of_news_media_APIs)
+* [Udacity Forums](https://discussions.udacity.com/c/nd001-front-end-broadcast)
 
 # How to Run:
 
