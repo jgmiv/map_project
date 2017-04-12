@@ -173,13 +173,6 @@ var placeMarkers = function() {
 
             function wikiLinks() {
 
-                // var $body = $('body');
-                // var $wikiHeaderElem = $('#wikipedia-header')
-                // var $wikiElem = $('#wikipedia-links');
-
-                // // clear out old data before new request
-                // $wikiElem.text("");
-
                 var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json'
 
                 $.ajax({
@@ -190,17 +183,16 @@ var placeMarkers = function() {
                         "format": "json",
                     },
                     dataType: "jsonp",
-                    vm.wikiInfo: {
+                    success: function(response){
+                    vm.wikiInfo ({
 
                         title: response[0],
                         url: response[3][0]
-                    },
-
+                    });
+                    }
                 });
 
             };
-
-
 
             $('#container').submit(wikiLinks);
 
@@ -291,16 +283,16 @@ var ViewModel = function() {
 
                 if (placeItem.title().toLowerCase().indexOf(filter) === -1) {
 
-                    placeItem.markers.setVisible(false);
+                    placeItem.marker.setVisible(false);
 
                     map.setZoom(15);
-                    // map.setTimeout('map.setZoom(17)', placeItem);
-                    map.panTo(placeItem.markers.position);
+                    // map.setTimeout('map.setZoom(15)', placeItem);
+                    map.panTo(placeItem.marker.position);
 
 
                 } else {
 
-                    placeItem.markers.setVisible(true);
+                    placeItem.marker.setVisible(true);
 
                 };
 
