@@ -110,7 +110,7 @@ var placeMarkers = function() {
         function toggleBounce(currentMarker) {
             currentMarker.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function() {
-                currentMarker.setAnimation(null)
+                currentMarker.setAnimation(null);
             }, 1400);
         }
     }
@@ -173,7 +173,12 @@ var placeMarkers = function() {
 
             function wikiLinks() {
 
-                var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json'
+                var $wikiHeaderElem = $('#wikipedia-header');
+                var wikiRequestTimeout = setTimeout(function(){
+                $wikiHeaderElem.text("failed to load wikipedia resources");
+                }, 8000);
+
+                var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json';
 
                 $.ajax({
                     url: wikipediaEndPointUrl,
@@ -192,16 +197,16 @@ var placeMarkers = function() {
                     }
                 });
 
-            };
+            }
 
             $('#container').submit(wikiLinks);
 
         }
 
-    };
+    }
 
 
-}
+};
 
 
 var Place = function(data) {
@@ -274,7 +279,7 @@ var ViewModel = function() {
         if (!filter) {
             for (var i = markers.length - 1; i >= 0; i--) {
                 markers[i].setVisible(true); //get all the markers back
-            };
+            }
             return self.placesList();
         } else {
             return ko.utils.arrayFilter(self.placesList(), function(placeItem) {
@@ -294,11 +299,11 @@ var ViewModel = function() {
 
                     placeItem.marker.setVisible(true);
 
-                };
+                }
 
                 return placeItem.title().toLowerCase().indexOf(filter) != -1;
             });
         }
 
     });
-}
+};
