@@ -169,7 +169,7 @@ var placeMarkers = function() {
             // Open the infowindow on the correct marker.
             infowindow.open(map, marker);
             // console.log("test");
-            
+
 
             function wikiLinks() {
 
@@ -183,12 +183,12 @@ var placeMarkers = function() {
                         "format": "json",
                     },
                     dataType: "jsonp",
-                    success: function(response){
-                    vm.wikiInfo ({
+                    success: function(response) {
+                        vm.wikiInfo({
 
-                        title: response[0],
-                        url: response[3][0]
-                    });
+                            title: response[0],
+                            url: response[3][0]
+                        });
                     }
                 });
 
