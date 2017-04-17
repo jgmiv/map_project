@@ -8,12 +8,14 @@ var vm;
 // Initilizes the map
 function initMap() {
     vm = new ViewModel();
+    var placeLatlng = {
+        lat: 33.209979,
+        lng: -87.571085
+    };
+
     map = new google.maps.Map(document.getElementById('map'), {
-        center: {
-            lat: 33.209979,
-            lng: -87.571085
-        },
-        zoom: 15
+        zoom: 15,
+        center: placeLatlng
     });
 
     largeInfoWindow = new google.maps.InfoWindow();
@@ -23,8 +25,8 @@ function initMap() {
 
 
 
-
 }
+
 //Model
 var currentPlaces = [{
     geometry: {
@@ -40,15 +42,15 @@ var currentPlaces = [{
     properties: 'Denny Chimes'
 }, {
     geometry: {
-        lat: 33.213905,
-        lng: -87.530016
+        lat: 33.2133867,
+        lng: -87.5304115
     },
     properties: 'Rhoads Stadium',
     image: 'https://s-media-cache-ak0.pinimg.com/236x/72/c6/0a/72c60a830cdd8e8e60cb9a1e1e959793.jpg'
 }, {
     geometry: {
-        lat: 33.210787,
-        lng: -87.532373
+        lat: 33.210780,
+        lng: -87.532379
     },
     properties: 'Alabama Soccer Stadium',
     image: "https://www.interiordecorating.com/images/products/1732-3757_z.jpg",
@@ -90,20 +92,21 @@ var placeMarkers = function() {
             title: title,
             image: image,
             animation: google.maps.Animation.DROP,
-            id: i,
-            // wiki: article
+            id: i
         });
 
         vm.placesList()[i].marker = marker;
 
         markers.push(marker);
-        // currentPlaces[i].marker = marker;
 
         marker.addListener('click', function() {
             var self = this;
             populateInfoWindow(this, largeInfoWindow);
             toggleBounce(this);
+
         });
+
+
 
         bounds.extend(markers[i].position);
 
@@ -133,7 +136,7 @@ var placeMarkers = function() {
             infowindow.addListener('closeclick', function() {
                 infowindow.marker = null;
             });
-            wikiLinks();
+
             var streetViewService = new google.maps.StreetViewService();
             var radius = 50;
             // In case the status is OK, which means the pano was found, compute the
@@ -168,15 +171,14 @@ var placeMarkers = function() {
 
             // Open the infowindow on the correct marker.
             infowindow.open(map, marker);
-            // console.log("test");
+            wikiLinks();
 
 
             function wikiLinks() {
-
-                var $wikiHeaderElem = $('#wikipedia-header');
-                var wikiRequestTimeout = setTimeout(function(){
-                $wikiHeaderElem.text("failed to load wikipedia resources");
-                }, 8000);
+                var $wikiHeaderElem = $('#wikipedia-header')
+                var wikiRequestTimeout = setTimeout(function() {
+                    $wikiHeaderElem.text("failed to load wikipedia resources");
+                }, 4000);
 
                 var wikipediaEndPointUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json';
 
@@ -194,12 +196,15 @@ var placeMarkers = function() {
                             title: response[0],
                             url: response[3][0]
                         });
+
+                        clearTimeout(wikiRequestTimeout);
+
                     }
                 });
 
             }
 
-            $('#container').submit(wikiLinks);
+
 
         }
 
@@ -263,14 +268,14 @@ var ViewModel = function() {
     this.setPlace = function(clickedPlace) {
         self.showPlace(clickedPlace);
         google.maps.event.trigger(clickedPlace.marker, 'click');
-        // console.log(clickedPlace.markers);
+        map.setCenter(clickedPlace.marker.position);
+        map.setZoom(17);
     };
 
     this.showPlace = function(location) {
         self.currentPlace(location);
+
     };
-
-
 
     //filter the items using the filter text
     self.filterPlaces = ko.computed(function() {
@@ -290,10 +295,6 @@ var ViewModel = function() {
 
                     placeItem.marker.setVisible(false);
 
-                    // map.setZoom(15);
-                    // // map.setTimeout('map.setZoom(15)', placeItem);
-                    // map.panTo(placeItem.marker.position);
-
 
                 } else {
 
@@ -307,3 +308,35 @@ var ViewModel = function() {
 
     });
 };
+
+function googleSuccess() {
+    if (typeof google !== 'undefined') {
+        ko.applyBindings(vm);
+    }
+    else {
+
+        googleError();
+    }
+
+};
+
+function googleError() {
+    
+    alert('Google Maps has failed to load.  Please contact Google @ google.com.');
+};
+/*
+* Open the drawer when the menu ison is clicked.
+*/
+var menu = document.querySelector('#menu');
+var main = document.querySelector('main');
+var drawer = document.querySelector('#drawer');
+
+menu.addEventListener('click', function(e) {
+drawer.classList.toggle('open');
+e.stopPropagation();
+});
+main.addEventListener('click', function() {
+drawer.classList.remove('open');
+});
+
+
