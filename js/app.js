@@ -118,7 +118,7 @@ var placeMarkers = function() {
         }
     }
 
-    map.fitBounds(bounds);
+        map.fitBounds(bounds);
 
     //getting data from wikipedia..
     //concept from the class videos tutorial..
@@ -327,6 +327,7 @@ function googleError() {
 /*
 * Open the drawer when the menu ison is clicked.
 */
+
 var menu = document.querySelector('#menu');
 var main = document.querySelector('main');
 var drawer = document.querySelector('#drawer');
